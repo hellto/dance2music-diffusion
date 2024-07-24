@@ -16,11 +16,6 @@ Dance2Music-Diffusion is a state-of-the-art model designed to generate music fro
 - **Dance Video Input**: Processes dance sequences to create matching music.
 - **Open Source**: The model and code are available for modification and improvement by the community.
 
-## Framework
-
-![Framework](dance2music-diffusion/frame_work.png)
-![Framework Simplified](dance2music-diffusion/frame_work_simply.png)
-
 ## Paper Abstract
 
 With the rapid development of social networks, short videos have become a popular form of content, especially dance videos. In this context, research on automatically generating music for dance videos shows significant practical value. However, existing studies face challenges such as limited richness in music timbre and lack of synchronization with dance movements. In this paper, we propose Dance2Music-Diffusion, a novel framework for music generation from dance videos using latent diffusion models. Our approach includes a motion encoder module for extracting motion features and a music diffusion generation module for generating latent music representations. By integrating dance type monitoring and latent diffusion techniques, our framework outperforms existing methods in generating complex and rich dance music. We conducted objective and subjective evaluations of the results produced by various existing models on the AIST++ dataset. Our framework shows outstanding performance in terms of beat recall rate, consistency with GT beats, and coordination with dance movements. This work represents the state of the art in automatic music generation from dance videos, is easy to train, and has implications for enhancing entertainment experiences and inspiring innovative dance productions. Sample videos of our generated music and dance can be viewed at [https://youtu.be/eCvLdLdkX-Y](https://youtu.be/eCvLdLdkX-Y).
