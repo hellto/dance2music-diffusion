@@ -4,7 +4,7 @@
 
 Dance2Music-Diffusion: Leveraging Latent Diffusion Models for Music Generation from Dance Videos
 
-<img src="frame_work.png"></img>
+<img src="./frame_work.png"></img>
 
 ## Overview
 
