@@ -305,7 +305,6 @@ def training(Dmodel,mot):
                 writer.add_scalar("loss_step", loss.item(), step)
 
 
-
             optimizer.zero_grad()
             optM.zero_grad()
             scaler.scale(0.1*loss).backward(retain_graph=True)
@@ -339,8 +338,6 @@ def training(Dmodel,mot):
         writer.close()
         epoch += 1
         
-
-
         ############### model save###########################################################
         Model_path_dir = f'./models/smpl_genre_{date}'  # 创建保存模型的文件夹
         if not os.path.exists(Model_path_dir):
