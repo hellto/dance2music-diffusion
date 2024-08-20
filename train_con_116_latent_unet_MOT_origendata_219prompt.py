@@ -30,15 +30,7 @@ from audio_diffusion_pytorch import DiffusionModel, UNetV0, VDiffusion, VSampler
 import os
 import os.path as osp
 
-##os.environ['PYOPENGL_PLATFORM'] = 'egl'
-
-# import cv2
-# import time
 import torch
-# import joblib
-# import shutil
-# import colorsys
-# import argparse
 import random
 import numpy as np
 from pathlib import Path
@@ -85,12 +77,11 @@ print("Libraries imported - ready to use PyTorch", torch.__version__)
 DEVICE = 'cuda:0'
 SEED = 42
 SAMPLE_RATE = 44100
-batch_size = 4
+batch_size = 6
 
 # from transformers import AutoModel
 # diffAE_model = AutoModel.from_pretrained(pretrained_model_name_or_path='./edge_aistpp/DMAE1d-ATC32-v3/',trust_remote_code=True)
 # diffAE_model.eval()
-
 
 def seed_everything(seed=42):
     random.seed(seed)
@@ -135,12 +126,6 @@ Dmodel = Dmodel.to(DEVICE)
 
 
 torch.cuda.empty_cache()  # 清空显存缓冲区
-
-# MODELPATH = './models/smpl_genre_0516/dancecondation_test0516.pth'
-# load_path = './models/smpl_genre_0516'
-# checkpoint = torch.load(MODELPATH)
-# Dmodel.load_state_dict(checkpoint['model_state_dict'])  # 载入之前训练的模型
-
 
 
 ######
@@ -319,21 +304,14 @@ def training(Dmodel,mot):
                 # tensorboard
                 writer.add_scalar("loss_step", loss.item(), step)
 
-            # sumloss=torch.zeros(loss.size())
-            # print(loss.size())
-            # sumloss=sumloss+loss
 
 
             optimizer.zero_grad()
             optM.zero_grad()
             scaler.scale(0.1*loss).backward(retain_graph=True)
             scaler.step(optimizer)
-
             scaler.scale(loss_g).backward()
-            
             scaler.step(optM)
-
-
 
             # print([x.grad for x in optimizer.param_groups[0]['params']])# 查看优化器的参数
             scaler.update()
@@ -356,32 +334,6 @@ def training(Dmodel,mot):
         scheduler_optM.step()  ###设置逐步减小的变化学习率
         writer.add_scalar("optM_learning_rate", optM.defaults['lr'], epoch)
         writer.add_scalar("optimizerD_learning_rate", optimizer.defaults['lr'], epoch)
-
-
-
-        # if epoch % 10 == 0:  #验证集
-        #     Dmodel.eval()
-        #     mot.eval()
-        #     sun_loss_eval = 0
-        #     for i, (a_t, m_t, genre, filename) in tqdm(enumerate(va_eval_loader)):
-        #         # get video, audio and beat data
-
-        #         a_t = a_t.float().to(DEVICE)  # torch.Size([2, 1, 262144])
-        #         m_t = m_t.float().to(DEVICE)  # m_t:torch.Size([2, 356, 219])
-        #         genre = genre.to(DEVICE)  # torch.Size([2, 1]) tensor(int)
-
-        #         # get output from encoder
-        #         motion, clas = mot(m_t)  # mx = mencoder(m_t):torch.Size([2, 1, 1024])
-               
-        #         with torch.cuda.amp.autocast():
-        #             loss_eval = Dmodel(a_t.to(DEVICE), text=motion.to(DEVICE),  # Text conditioning, one element per batch
-        #                           embedding_mask_proba=0.2
-        #                           # Probability of masking text with learned embedding (Classifier-Free Guidance Mask)
-        #                           ).to(DEVICE)
-        #             writer.add_scalar("eval_step", loss_eval.item(), step+i) #输出验证集的没有loss
-        #             sun_loss_eval = sun_loss_eval + loss_eval.item()
-        #     avg_loss_eval = sun_loss_eval/24  #验证集总共24个clip
-        #     writer.add_scalar("avg_eval_step", avg_loss_eval , epoch)   #打印验证集的平均loss
         
         torch.cuda.empty_cache()  # 清空显存缓冲区 
         writer.close()
@@ -389,40 +341,18 @@ def training(Dmodel,mot):
         
 
 
-        # model save###########################################################
-       
+        ############### model save###########################################################
         Model_path_dir = f'./models/smpl_genre_{date}'  # 创建保存模型的文件夹
         if not os.path.exists(Model_path_dir):
             os.makedirs(Model_path_dir)
 
         if epoch % 200 == 0:
-            # t.save({
-            #     'epoch': epoch,
-            #     'model_state_dict': Dmodel.state_dict(),
-            #     'optimizer_state_dict': optimizer.state_dict(),
-            # }, f'{Model_path_dir}/dancecondation_test{epoch}.pth')
             t.save(mot.state_dict(), f"{Model_path_dir}/MOT{epoch}.pt")
             t.save(Dmodel.state_dict(), f'{Model_path_dir}/dancecondation_test{epoch}.pt')
-            # t.save(optM.state_dict(), f"{Model_path_dir}/optM{epoch}.pt")
-
-           
-        # if avg_loss_eval < loss_min:
-        #     loss_min=avg_loss_eval
-        #     print(f"\n---------------------------------save best model epoch:{epoch}--------------------------------\n")
-      
-        #     t.save(Dmodel.state_dict(), f'{Model_path_dir}/dancecondation_test{epoch}_best.pt')
-        #     t.save(mot.state_dict(), f"{Model_path_dir}/MOT{epoch}_best.pt")
-        #     # torch.save(optM.state_dict(), f"{Model_path_dir}/optM_best.pt")
-            
+         
         if epoch % 3 == 0:
-            # torch.save({
-            #     'epoch': epoch,
-            #     'model_state_dict': Dmodel.state_dict(),
-            #     'optimizer_state_dict': optimizer.state_dict(),
-            # }, f'{Model_path_dir}/dancecondation_test_final.pth')
             t.save(Dmodel.state_dict(), f'{Model_path_dir}/dancecondation_test_final.pt')
             t.save(mot.state_dict(), f"{Model_path_dir}/MOT_final.pt")
-            # torch.save(optM.state_dict(), f"{Model_path_dir}/optM_final.pt")
 
 
 if __name__ == '__main__':
