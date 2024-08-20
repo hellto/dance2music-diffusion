@@ -1,7 +1,8 @@
 *.log
 log/
 models/
-src/funasr/edge_aistpp/
+src/funasr/
+edge_aistpp/
 a__unet/__pycache__/__init__.cpython-310.pyc
 a__unet/__pycache__/apex.cpython-310.pyc
 a__unet/__pycache__/blocks.cpython-310.pyc
