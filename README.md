@@ -43,18 +43,33 @@ To get started with Dance2Music-Diffusion, follow these steps:
 
 ## Usage
 
+###  Data for training
+
+Download the dataset zip file d2m-diffusion necessary package.zip and extract all files to edge_aistpp/. This folder contains the raw files of the AIST++ dataset, the latent music representations encoded by DMAE, and the DMAE model files.
+
+edge_aistpp/
+├── DMAE1d-ATC32-v3/
+├── genre_token/
+├── smpl_motion_219/
+├── wavs/
+├── wavs_latent/
+└── extract_wav_latent.py
+
+Baidu Cloud link: https://pan.baidu.com/s/14PO1xosgtVrmGzGmeyPBMA?pwd=0413
+Extraction code: 0413
+
 ### Training the Model
 
 To train the model, run the following command:
 ```sh
-python train_con_latent_unet_MOT_origendata_219prompt.py
+python train_con_116_latent_unet_MOT_origendata_219prompt.py
 ```
 
 ### Generating Music
 
 To generate music from a dance video, use the following command:
 ```sh
-python genrate_latent_unet_MOT_origendata.py 
+python genrate_116_latent_unet_MOT_origendata.py
 ```
 
 ### Extracting Music Latent Representations
