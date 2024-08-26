@@ -135,12 +135,6 @@ Dmodel = Dmodel.to(DEVICE)
 
 torch.cuda.empty_cache()  # 清空显存缓冲区
 
-# MODELPATH = './models/smpl_genre_0516/dancecondation_test0516.pth'
-# load_path = './models/smpl_genre_0516'
-# checkpoint = torch.load(MODELPATH)
-# Dmodel.load_state_dict(checkpoint['model_state_dict'])  # 载入之前训练的模型
-
-
 
 ######
 ##读入视频
@@ -197,16 +191,12 @@ class VAMDataset(torch.utils.data.Dataset):
         # Read filename
         filename = video_file.split('/')[-1].split('.')[0]  # 获得文件名
 
-        # List = [0, 1]
-        # randomx = choice(List)  # 随机选择０１秒起点
-        # motion_random_start = int(randomx) * 60
-        # music_random_start = int(randomx) * sampling_rate
+        # Read genre
         motion_random_start =0
 
         # random start music and motion
         smpl_motion = smpl_motion[(motion_random_start):(motion_random_start + self.segment_motion_length), :]
         # audio = audio[(music_random_start):(music_random_start + self.segment_wav_length)]
-
 
         # read genre
         genre_dic = {'gLH': 0, 'gKR': 1, 'gPO': 2, 'gBR': 3, 'gWA': 4, 'gJS': 5, 'gMH': 6, 'gHO': 7, 'gJB': 8, 'gLO': 9}
@@ -298,14 +288,7 @@ def generate(Dmodel,mot,diffAE_model):
             n_grad_freq = 2  # 频域去噪参数，根据需要调整
             n_grad_time = 4  # 时间域去噪参数，根据需要调整
             n_fft = 2048  # FFT 窗口大小，根据需要调整
-            # sample = reduce_noise(y=sample,y_noise=noise_sample,sr=44100
-            #                       # ,n_grad_freq=n_grad_freq,
-            #                       # n_grad_time=n_grad_time,n_fft=n_fft
-            #                       )  # 降噪
-            # sample = reduce_noise(y=sample, sr=44100)  # 降噪
-
-            # sample = reduce_noise(y=sample, sr=44100) #去噪
-
+            
             torchaudio.save(f'{savedir}/test_generated_latent_{filename}_884_embedding_scale4_44100.wav',
                             sample,
                             SAMPLE_RATE)
