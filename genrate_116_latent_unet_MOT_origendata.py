@@ -47,7 +47,7 @@ import random
 import torch
 import torch as t
 from a__unet import   MOT
-from noisereduce import reduce_noise #降噪
+# from noisereduce import reduce_noise #降噪
 
 import torchaudio
 
@@ -241,29 +241,17 @@ class VAMDataset(torch.utils.data.Dataset):
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters())
 
-va_test_set = VAMDataset(video_dir='edge_aistpp/smpl_motion_219_complete/test_data')
-# va_test_set = VAMDataset(video_dir='edge_aistpp/smpl_motion_219/test_data')
+va_test_set = VAMDataset(video_dir='edge_aistpp/smpl_motion_219/test_data')
 va_test_loader = DataLoader(va_test_set, batch_size =1, num_workers=0, shuffle=True)
 
-#*********************加载之前训练的模型************************************#
-# Dmodel.load_state_dict(torch.load("./models/smpl_genre_1221_origin_latent!_unet_newmotclsloss/dancecondation_test_final.pt"))
-# mot.load_state_dict(torch.load("./models/smpl_genre_1221_origin_latent!_unet_newmotclsloss/MOT_final.pt"))
-# Dmodel.load_state_dict(torch.load("./models/smpl_genre_1221_origin_latent!_unet_newmotclsloss_2/dancecondation_test_final.pt"))
-# mot.load_state_dict(torch.load("./models/smpl_genre_1221_origin_latent!_unet_newmotclsloss_2/MOT_final.pt"))
-# Dmodel.load_state_dict(torch.load("./models/smpl_genre_0108_mean_(1221cls)_origin_latent!_unet_newmotclsloss/dancecondation_test_final.pt"))
-# mot.load_state_dict(torch.load("./models/smpl_genre_0108_mean_(1221cls)_origin_latent!_unet_newmotclsloss/MOT_final.pt"))
+#*********************Load the previously trained model************************************#
 
-# Dmodel.load_state_dict(torch.load("./models/smpl_genre_0124_mean_(1221cls)_origin_latent!_unet_nogenreloss_newmotclsloss_2/dancecondation_test_final.pt"))
-# mot.load_state_dict(torch.load("./models/smpl_genre_0124_mean_(1221cls)_origin_latent!_unet_nogenreloss_newmotclsloss_2/MOT_final.pt"))
-Dmodel.load_state_dict(torch.load("./models/smpl_genre_0129_mean_(1221cls)_origin_latent!_unet_newmotclsloss_2_0126/dancecondation_test_final.pt"))
-mot.load_state_dict(torch.load("./models/smpl_genre_0129_mean_(1221cls)_origin_latent!_unet_newmotclsloss_2_0126/MOT_final.pt"))
+Dmodel.load_state_dict(torch.load("./models/smpl_genre_0720_0220_mean_(1221cls)_origin_latent!_unet_newmotclsloss_357219prompt/dancecondation_test_final.pt"))
+mot.load_state_dict(torch.load("./models/smpl_genre_0720_0220_mean_(1221cls)_origin_latent!_unet_newmotclsloss_357219prompt/MOT_final.pt"))
 
+#***************************Where to save the generated music*******************************#
 
-#**********************************************************#
-# savedir='./Generate/1221_origin_latent_unet_newmotclsloss_2'
-# savedir='./Generate/0124_mean_(1221cls)_origin_latent!_unet_nogenreloss_newmotclsloss_2'
-
-savedir='./Generate/0129_mean_(1221cls)_origin_latent_unet_newmot_mean_clsloss'
+savedir='./Generate/0720_0220_mean(1221cls)_origin_latent_unet_newmot357219prompt'
 os.makedirs(savedir,exist_ok=True)
 
 
